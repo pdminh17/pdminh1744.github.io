@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video clip TrườngPhan cực HOT!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&family=VT323&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background: #0a0512;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+        }
+
+        /* Canvas hiệu ứng pháo hoa / hoa rơi */
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Container chính chứa các bước nội dung */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        /* Hiệu ứng Fade Smooth */
+        .step {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            width: 100%;
+        }
+
+        .step.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tiêu đề Minh đây */
+        .header-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            color: #ff80bf;
+            text-shadow: 0 0 12px #ff3399, 0 0 25px #ff007f, 0 0 40px #ff007f;
+            margin-bottom: 15px;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 10px #ff3399, 0 0 20px #ff007f; }
+            100% { text-shadow: 0 0 20px #ff66b2, 0 0 35px #ff007f, 0 0 50px #ff007f; }
+        }
+
+        .sub-text {
+            font-size: 1.5rem;
+            color: #e6ccff;
+            text-shadow: 0 0 8px rgba(230, 204, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Nhóm nút tương tác */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            position: relative;
+            min-height: 60px;
+            width: 100%;
+        }
+
+        /* Nút chuyển tiếp / tương tác */
+        .btn-next {
+            background: linear-gradient(135deg, #ff3399, #ff007f);
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
+            transition: all 0.3s ease;
+            outline: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .btn-next:active {
+            transform: scale(0.95);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 128, 191, 0.5);
+            color: #ffe6f2;
+        }
+
+        .btn-secondary:active {
+            background: rgba(255, 128, 191, 0.3);
+        }
+
+        /* Nút chạy trốn */
+        #btnNo {
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        /* Giao diện 2 ô vuông phát sáng neon xanh (Ui cậu đẹp quá) */
+        .eyes-box-container {
+            display: flex;
+            gap: 30px;
+            margin: 25px 0 15px 0;
+            justify-content: center;
+        }
+
+        .glowing-eye {
+            width: 75px;
+            height: 75px;
+            background-color: #00f0ff;
+            border-radius: 20px;
+            box-shadow: 0 0 20px #00f0ff, 0 0 40px #00f0ff, inset 0 0 10px #ffffff;
+            position: relative;
+            animation: blink 4s infinite;
+        }
+
+        .glowing-eye::after {
+            content: "////";
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff4d94;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .typewriter-text {
+            font-family: 'VT323', monospace;
+            font-size: 2.2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            min-height: 40px;
+        }
+
+        /* Khung thư chúc mừng 20/10 */
+        .card-letter {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 128, 191, 0.35);
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 102, 178, 0.25);
+            width: 100%;
+        }
+
+        .card-letter h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ff99dd;
+            margin-bottom: 12px;
+        }
+
+        .card-letter p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #f5e6ff;
+            margin-bottom: 12px;
+        }
+
+        /* Tối ưu hóa giao diện cho điện thoại */
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 3.5rem;
+            }
+            .sub-text {
+                font-size: 1.25rem;
+                margin-bottom: 20px;
+            }
+            .btn-next {
+                padding: 12px 22px;
+                font-size: 1rem;
+                width: 100%;
+                max-width: 280px;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .glowing-eye {
+                width: 60px;
+                height: 60px;
+                border-radius: 16px;
+            }
+            .eyes-box-container {
+                gap: 20px;
+            }
+            .typewriter-text {
+                font-size: 1.8rem;
+            }
+            .card-letter h2 {
+                font-size: 2.2rem;
+            }
+            .card-letter p {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Hiệu ứng bong bóng thả tim khi bấm */
+        .heart-bubble {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 1.5s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Hoa/Trái tim rơi */
+        .particle {
+            position: absolute;
+            top: -50px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 2;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+        <!-- Step 1: Phần đầu web - Đổi thành Minh đây -->
+        <div id="step1" class="step active">
+            <h1 class="header-title">Minh đây</h1>
+            <p class="sub-text">Chào mừng bạn đến với món quà 20/10 ngọt ngào này 🌸</p>
+            <div class="button-group">
+                <button class="btn-next" onclick="nextStep(2)">Khám phá ngay ✨</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Tương tác hỏi chọn (có nút né tránh) -->
+        <div id="step2" class="step">
+            <p class="sub-text">Hôm nay là ngày 20/10 đó,<br>cậu có sẵn sàng nhận quà chưa? 🎁</p>
+            <div class="button-group">
+                <button class="btn-next" onclick="nextStep(3)">Sẵn sàng 100% 💕</button>
+                <button class="btn-next btn-secondary" id="btnNo" onmouseover="dodgeButton()" ontouchstart="dodgeButton(event)" onclick="dodgeButton(event)">Chưa sẵn sàng 😜</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Tương tác cảm xúc chọn câu chúc -->
+        <div id="step3" class="step">
+            <p class="sub-text">Hôm nay tâm trạng của cậu thế nào? ✨</p>
+            <div class="button-group">
+                <button class="btn-next btn-secondary" onclick="chooseMood('Rất vui vẻ 😄')">Rất vui vẻ 😄</button>
+                <button class="btn-next btn-secondary" onclick="chooseMood('Hơi mệt mỏi 🥺')">Hơi mệt mỏi 🥺</button>
+                <button class="btn-next btn-secondary" onclick="chooseMood('Đang mong chờ quà 💖')">Mong chờ món quà 💖</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Lời dẫn chuyển tiếp -->
+        <div id="step4" class="step">
+            <p id="moodResponse" class="sub-text">Dù thế nào thì hôm nay cậu vẫn luôn là người tuyệt vời nhất! 🌸</p>
+            <div class="button-group">
+                <button class="btn-next" onclick="nextStep(5)">Bật mí điều bất ngờ ✨</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Giao diện 2 ô vuông phát sáng "ui cậu đẹp quá" -->
+        <div id="step5" class="step">
+            <div class="eyes-box-container">
+                <div class="glowing-eye"></div>
+                <div class="glowing-eye"></div>
+            </div>
+            <div id="typewriter" class="typewriter-text"></div>
+            <div class="button-group" style="margin-top:25px;">
+                <button class="btn-next" id="btnAfterTypewriter" style="display:none;" onclick="nextStep(6)">Xem lá thư chúc mừng 💌</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Thiệp chúc mừng 20/10 tương tác (Trang cuối - cắt bỏ cửa hàng tiny) -->
+        <div id="step6" class="step">
+            <div class="card-letter">
+                <h2>Chúc Mừng Ngày 20/10! 💐</h2>
+                <p>Chúc cậu luôn ngập tràn nụ cười, rạng rỡ, xinh đẹp và xinh tươi mỗi ngày.</p>
+                <p>Mong rằng mọi điều may mắn, bình an và hạnh phúc nhất sẽ luôn đồng hành cùng cậu trên mọi chặng đường! 💕</p>
+                
+                <div class="button-group" style="margin-top: 25px;">
+                    <button class="btn-next" onclick="spawnHearts(event)">Thả tim chúc mừng 💖</button>
+                    <button class="btn-next btn-secondary" onclick="nextStep(1)">Xem lại từ đầu 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Hiệu ứng hoa/sao/trái tim rơi liên tục
+        const symbols = ['❀', '✿', '❁', '✧', '🌸', '💖', '✨'];
+        const colors = ['#ff99cc', '#ff66b2', '#e6ccff', '#ffffff', '#ffb3d9'];
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.fontSize = (Math.random() * 14 + 12) + 'px';
+            particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            document.body.appendChild(particle);
+
+            setTimeout(() => { particle.remove(); }, 7000);
+        }
+        setInterval(createParticle, 220);
+
+        // 2. Chuyển đổi các bước
+        let currentStep = 1;
+
+        function nextStep(stepNum) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = stepNum;
+            const nextEl = document.getElementById(`step${currentStep}`);
+            nextEl.classList.add('active');
+
+            if (stepNum === 5) {
+                startTypewriter();
+            }
+        }
+
+        // 3. Nút "Chưa sẵn sàng" chạy né chuột/tay bấm (hỗ trợ cả cảm ứng điện thoại)
+        function dodgeButton(e) {
+            if (e && e.type === 'touchstart') {
+                e.preventDefault();
+            }
+            const btn = document.getElementById('btnNo');
+            const x = (Math.random() - 0.5) * (window.innerWidth < 600 ? 150 : 220);
+            const y = (Math.random() - 0.5) * (window.innerHeight < 600 ? 80 : 120);
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // 4. Xử lý lựa chọn tâm trạng ở Step 3
+        function chooseMood(mood) {
+            const res = document.getElementById('moodResponse');
+            if (mood.includes('mệt mỏi')) {
+                res.innerHTML = "Thương cậu lắm! Hãy xua tan mệt mỏi và đón nhận điều ngọt ngào này nhé 🥰";
+            } else if (mood.includes('vui vẻ')) {
+                res.innerHTML = "Tuyệt vời quá! Hãy giữ nụ cười rạng rỡ ấy mãi nhé! 🌸";
+            } else {
+                res.innerHTML = "Món quà tuyệt vời nhất dành riêng cho cậu đây rồi! 🎁✨";
+            }
+            nextStep(4);
+        }
+
+        // 5. Hiệu ứng gõ chữ "ui cậu đẹp quá"
+        const textToType = "ui cậu đẹp quá";
+        let typeIndex = 0;
+
+        function startTypewriter() {
+            const el = document.getElementById('typewriter');
+            const btn = document.getElementById('btnAfterTypewriter');
+            el.innerText = "";
+            typeIndex = 0;
+            btn.style.display = "none";
+
+            function type() {
+                if (typeIndex < textToType.length) {
+                    el.innerText += textToType.charAt(typeIndex);
+                    typeIndex++;
+                    setTimeout(type, 120);
+                } else {
+                    btn.style.display = "inline-block";
+                }
+            }
+            setTimeout(type, 400);
+        }
+
+        // 6. Tương tác thả tim bay lên khi bấm nút cuối
+        function spawnHearts(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-bubble');
+                heart.innerText = ['💖', '🌸', '✨', '💕', '🌺'][Math.floor(Math.random() * 5)];
+                heart.style.left = ((clientX || window.innerWidth / 2) + (Math.random() - 0.5) * 100) + 'px';
+                heart.style.top = ((clientY || window.innerHeight / 2) + (Math.random() - 0.5) * 50) + 'px';
+                document.body.appendChild(heart);
+
+                setTimeout(() => { heart.remove(); }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
